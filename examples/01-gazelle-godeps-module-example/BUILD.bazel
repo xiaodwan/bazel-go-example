@@ -1,0 +1,24 @@
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+# BUILD.bazel
+# This file defines the build targets for your application.
+
+load("@gazelle//:def.bzl", "gazelle")
+
+gazelle(name = "gazelle")
+
+# gazelle:prefix go_glog_example
+
+go_library(
+    name = "go_glog_example_lib",
+    srcs = ["main.go"],
+    importpath = "go_glog_example",
+    visibility = ["//visibility:private"],
+    deps = ["@com_github_golang_glog//:go_default_library", "@com_github_go_openapi_strfmt//:go_default_library"],
+)
+
+go_binary(
+    name = "go_glog_example",
+    embed = [":go_glog_example_lib"],
+    visibility = ["//visibility:public"],
+)
