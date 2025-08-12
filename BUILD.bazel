@@ -1,0 +1,29 @@
+# BUILD.bazel
+# This file defines the build targets for your application.
+
+# Load the Go rules that we will use to define the targets.
+load("@rules_go//go:def.bzl", "go_binary", "go_library")
+
+# --- Go Library ---
+# This rule compiles your Go source files into a library.
+# It's a good practice to separate library code from the main executable.
+go_library(
+    name = "lib",
+    srcs = ["main.go"],
+    # A unique import path for your library.
+    importpath = "my_company/hello",
+    # Declare the dependency on the glog library.
+    deps = ["@com_github_golang_glog//:glog", "@com_github_go_openapi_strfmt//:go_default_library"],
+)
+
+# --- Go Binary ---
+# This rule creates the final executable file.
+# It takes the library we defined above and links it into a runnable binary.
+go_binary(
+    name = "hello_glog",
+    # Embed the library target.
+    embed = [":lib"],
+    # Make this target visible to the entire workspace.
+    visibility = ["//visibility:public"],
+)
+
